@@ -6,24 +6,34 @@ from threading import Thread
 File = namedtuple('File', 'name text')
 
 
-class InputData(object):
+class GenericInputData(object):
 
     def read(self):
         raise NotImplementedError
 
+    @classmethod
+    def generate_inputs(cls, config):
+        raise NotImplementedError
 
-class PathInputData(object):
+
+class PathInputData(GenericInputData):
 
     def __init__(self, path):
         super().__init__()
         self.path = path
 
     def read(self):
-        with open(self.path) as file:
-            return file.read()
+        with open(self.path) as f:
+            return f.read()
+
+    @classmethod
+    def generate_inputs(cls, config):
+        data_dir = config['data_dir']
+        for name in os.listdir(data_dir):
+            yield cls(os.path.join(data_dir, name))
 
 
-class Worker(object):
+class GenericWorker(object):
 
     def __init__(self, input_data):
         self.input_data = input_data
@@ -35,8 +45,15 @@ class Worker(object):
     def reduce(self, other):
         raise NotImplementedError
 
+    @classmethod
+    def create_workers(cls, input_class, config):
+        workers = []
+        for input_data in input_class.generate_inputs(config):
+            workers.append(cls(input_data))
+        return workers
 
-class LineCountWorker(Worker):
+
+class LineCountWorker(GenericWorker):
 
     def map(self):
         data = self.input_data.read()
@@ -57,18 +74,6 @@ def write_test_files(tmpdir):
             f.write(file.text)
 
 
-def generate_inputs(data_dir):
-    for name in os.listdir(data_dir):
-        yield PathInputData(os.path.join(data_dir, name))
-
-
-def create_workers(input_list):
-    workers = []
-    for input_data in input_list:
-        workers.append(LineCountWorker(input_data))
-    return workers
-
-
 def execute(workers):
     threads = [Thread(target=worker.map) for worker in workers]
     for thread in threads:
@@ -82,16 +87,16 @@ def execute(workers):
     return first.result
 
 
-def map_reduce(data_dir):
-    inputs = generate_inputs(data_dir)
-    workers = create_workers(inputs)
+def map_reduce(worker_class, input_class, config):
+    workers = worker_class.create_workers(input_class, config)
     return execute(workers)
 
 
 def main():
     with TemporaryDirectory() as tmpdir:
         write_test_files(tmpdir)
-        result = map_reduce(tmpdir)
+        config = {'data_dir': tmpdir}
+        result = map_reduce(LineCountWorker, PathInputData, config)
 
     print('There are', result, 'lines')
 
