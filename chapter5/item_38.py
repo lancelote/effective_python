@@ -12,7 +12,7 @@ class LockingCounter(object):
             self.count += offset
 
 
-def worker(sensor_index, how_many, counter):
+def worker(how_many, counter):
     for _ in range(how_many):
         # Read data from the sensor
         # ...
@@ -21,8 +21,8 @@ def worker(sensor_index, how_many, counter):
 
 def run_threads(func, how_many, counter):
     threads = []
-    for i in range(5):
-        args = (i, how_many, counter)
+    for _ in range(5):
+        args = (how_many, counter)
         thread = Thread(target=func, args=args)
         threads.append(thread)
         thread.start()
