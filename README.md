@@ -16,6 +16,8 @@ Code from [Effective Python][1] book by Brett Slatkin
   - [Item 38](chapter5/item_38.py) - lock with threads to prevent races
   - [Item 39](chapter5/item_39.py) - queue for threads coordination
   - [Item 40](chapter5/item_40.py) - coroutines for many concurrent functions
-  - [Item 41](chapter6/item_41.py) - `concurrent.futures` for parallelism
+  - [Item 41](chapter5/item_41.py) - `concurrent.futures` for parallelism
+- Chapter 6 - Builtin Modules
+  - [Item 43](chapter6/item_43.py) - `contextlib` and `with` statements
 
  [1]: https://www.amazon.com/Effective-Python-Specific-Software-Development/dp/0134034287/189-6025887-2775825
