@@ -19,5 +19,6 @@ Code from [Effective Python][1] book by Brett Slatkin
   - [Item 41](chapter5/item_41.py) - `concurrent.futures` for parallelism
 - Chapter 6 - Builtin Modules
   - [Item 43](chapter6/item_43.py) - `contextlib` and `with` statements
+  - [Item 44](chapter6/item_44.py) - make `pickle reliable with `copyreg`
 
  [1]: https://www.amazon.com/Effective-Python-Specific-Software-Development/dp/0134034287/189-6025887-2775825
