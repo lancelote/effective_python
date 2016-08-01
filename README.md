@@ -23,5 +23,6 @@ Code from [Effective Python][1] book by Brett Slatkin
 - Chapter 7 - Collaboration
   - [Item 50](chapter7/item_50/) - `__all__` and packages
   - [Item 51](chapter7/item_51.py) - custom exceptions
+  - [Item 59](chapter7/item_59.py) - memory profiling
 
  [1]: https://www.amazon.com/Effective-Python-Specific-Software-Development/dp/0134034287/189-6025887-2775825
